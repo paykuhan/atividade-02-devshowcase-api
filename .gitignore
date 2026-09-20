@@ -1,0 +1,20 @@
+# Dependências
+node_modules/
+
+# Variáveis de ambiente
+.env
+
+# Banco de dados local
+dev.db
+
+# Arquivos gerados pelo Prisma
+src/generated/prisma/
+
+# Código compilado
+dist/
+
+# Arquivos auxiliares gerados pelo Prisma
+.agents/
+.claude/
+.windsurf/
+skills-lock.json
