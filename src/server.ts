@@ -1,5 +1,7 @@
 import express from "express";
 import { routes } from "./routes/index";
+import { errorMiddleware } from "./middlewares/error.middleware";
+import { AppError } from "./errors/AppError";
 
 const app = express();
 
@@ -14,6 +16,11 @@ app.get("/", (req, res) => {
     mensagem: "DevShowcase API está funcionando!"
   });
 });
+app.use((req, res, next) => {
+  next(new AppError("Rota não encontrada", 404));
+});
+
+app.use(errorMiddleware);
 
 app.listen(PORT, () => {
   console.log(`Servidor rodando em http://localhost:${PORT}`);

@@ -4,20 +4,11 @@ import { technologyService } from "../services/technology.service";
 
 export const technologyController = {
   async create(req: Request, res: Response) {
-    try {
-      const data = createTechnologySchema.parse(req.body);
+    const data = createTechnologySchema.parse(req.body);
 
-      const technology = await technologyService.create(data.name);
+    const technology = await technologyService.create(data.name);
 
-      return res.status(201).json(technology);
-    } catch (error) {
-      return res.status(400).json({
-        error:
-          error instanceof Error
-            ? error.message
-            : "Erro ao cadastrar tecnologia"
-      });
-    }
+    return res.status(201).json(technology);
   },
 
   async findAll(req: Request, res: Response) {

@@ -9,6 +9,12 @@ type CreateProjectData = {
   technologyIds: number[];
 };
 
+type FindProjectsParams = {
+  technology?: string;
+  page: number;
+  limit: number;
+};
+
 export const projectRepository = {
   async create(data: CreateProjectData) {
     return prisma.project.create({
@@ -38,13 +44,78 @@ export const projectRepository = {
     });
   },
 
-  async findAll() {
-    return prisma.project.findMany({
+  async findById(id: number) {
+    return prisma.project.findUnique({
+      where: {
+        id
+      },
       include: {
         profile: true,
         technologies: true,
         feedbacks: true
       }
     });
+  },
+
+  async updateAverageRating(id: number, averageRating: number) {
+    return prisma.project.update({
+      where: {
+        id
+      },
+      data: {
+        averageRating
+      }
+    });
+  },
+
+  async incrementUpvotes(id: number) {
+    return prisma.project.update({
+      where: {
+        id
+      },
+      data: {
+        upvotes: {
+          increment: 1
+        }
+      }
+    });
+  },
+
+  async findAll(params: FindProjectsParams) {
+    const { technology, page, limit } = params;
+
+    const where = technology
+      ? {
+          technologies: {
+            some: {
+              name: technology
+            }
+          }
+        }
+      : {};
+
+    const skip = (page - 1) * limit;
+
+    const [projects, total] = await Promise.all([
+      prisma.project.findMany({
+        where,
+        skip,
+        take: limit,
+        include: {
+          profile: true,
+          technologies: true,
+          feedbacks: true
+        }
+      }),
+
+      prisma.project.count({
+        where
+      })
+    ]);
+
+    return {
+      projects,
+      total
+    };
   }
 };

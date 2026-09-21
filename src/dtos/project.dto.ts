@@ -31,3 +31,21 @@ export const createProjectSchema = z.object({
 });
 
 export type CreateProjectDTO = z.infer<typeof createProjectSchema>;
+export const projectQuerySchema = z.object({
+  technology: z.string().trim().min(1).optional(),
+
+  page: z.coerce
+    .number()
+    .int()
+    .positive()
+    .default(1),
+
+  limit: z.coerce
+    .number()
+    .int()
+    .positive()
+    .max(100)
+    .default(10)
+});
+
+export type ProjectQueryDTO = z.infer<typeof projectQuerySchema>;

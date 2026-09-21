@@ -1,3 +1,4 @@
+import { AppError } from "../errors/AppError";
 import { profileRepository } from "../repositories/profile.repository";
 import type { CreateProfileDTO } from "../dtos/profile.dto";
 
@@ -9,9 +10,9 @@ export const profileService = {
   async findById(id: number) {
     const profile = await profileRepository.findById(id);
 
-    if (!profile) {
-      throw new Error("Perfil não encontrado");
-    }
+  if (!profile) {
+  throw new AppError("Perfil não encontrado", 404);
+}
 
     return profile;
   }

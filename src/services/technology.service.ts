@@ -1,3 +1,4 @@
+import { AppError } from "../errors/AppError";
 import { technologyRepository } from "../repositories/technology.repository";
 
 export const technologyService = {
@@ -6,8 +7,8 @@ export const technologyService = {
       await technologyRepository.findByName(name);
 
     if (existingTechnology) {
-      throw new Error("Tecnologia já cadastrada");
-    }
+    throw new AppError("Tecnologia já cadastrada", 400);
+  }
 
     return technologyRepository.create(name);
   },

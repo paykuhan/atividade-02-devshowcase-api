@@ -3,6 +3,7 @@ import { prisma } from "../lib/prisma";
 type CreateFeedbackData = {
   authorName: string;
   message: string;
+  rating: number;
   projectId: number;
 };
 
@@ -22,5 +23,17 @@ export const feedbackRepository = {
         createdAt: "desc"
       }
     });
+  },
+  async getAverageRating(projectId: number) {
+  const result = await prisma.feedback.aggregate({
+    where: {
+      projectId
+    },
+    _avg: {
+      rating: true
+    }
+  });
+
+   return result._avg.rating ?? 0;
   }
 };
