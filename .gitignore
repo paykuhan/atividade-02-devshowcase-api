@@ -18,3 +18,5 @@ dist/
 .claude/
 .windsurf/
 skills-lock.json
+# Backup local das migrations antigas do SQLite
+prisma/migrations_sqlite_backup/
